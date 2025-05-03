@@ -1,4 +1,32 @@
-a=1
-b=2
-c=a+b
-print("C")
+import threading
+import time
+import random
+
+# Critical temperature threshold
+CRITICAL_TEMP = 75
+
+# Real-time sensor simulation
+def temperature_sensor():
+    while True:
+        temp = random.uniform(60.0, 85.0)  # Simulated sensor data
+        print(f"[Sensor] Current Temperature: {temp:.2f} °C")
+        if temp >= CRITICAL_TEMP:
+            print("🚨 [ALERT] Critical Temperature Reached! 🚨")
+        time.sleep(1)  # 1-second real-time delay
+
+# Main thread runs the sensor
+def main():
+    print("[System] Starting Real-Time Temperature Monitor...")
+    sensor_thread = threading.Thread(target=temperature_sensor, daemon=True)
+    sensor_thread.start()
+
+    # Keep main thread alive
+    try:
+        while True:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print("\n[System] Monitoring Stopped by User.")
+
+if __name__ == "__main__":
+    main()
+
